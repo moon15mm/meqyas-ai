@@ -460,3 +460,28 @@ async def reveal_contact(session: AsyncSession, ctx: OrgContext, case_id: uuid.U
     )
     await session.commit()
     return contact
+
+
+async def analyze_retention(
+    session: AsyncSession,
+    ctx: OrgContext,
+    data: Any,
+) -> Any:
+    """Analyze customer interaction and formulate retention remediation using Meta Llama 3."""
+    from meqyas_ai.agents.cx_retention_agent import CXRetentionAgent
+    from . import ai as ai_svc
+
+    org = await session.get(Organization, ctx.organization_id)
+    if not org:
+        raise ValueError("Organization not found")
+
+    result, _ = await ai_svc.run_agent(
+        session,
+        organization=org,
+        user_id=ctx.user_id,
+        agent=CXRetentionAgent(),
+        data=data,
+        entity_type="cx_retention",
+    )
+    return result.output
+

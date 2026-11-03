@@ -15,6 +15,7 @@ from fastapi import APIRouter, Depends, Query, status
 
 from ...schemas.common import OkOut
 from ...schemas.cx import CaseFilter, CaseOut, CasePatch, LocationIn, LocationOut, LocationPatch
+from meqyas_ai.schemas.retention import RetentionAnalysisIn, RetentionAnalysisOut
 from ...services import cx as cx_svc
 from ...services import locations as location_svc
 from ..deps import DB, Ctx, feature
@@ -66,3 +67,12 @@ async def update_case(case_id: uuid.UUID, data: CasePatch, ctx: Ctx, session: DB
 @router.post("/cx/cases/{case_id}/contact", summary="Reveal the customer's contact details (audited)")
 async def reveal_contact(case_id: uuid.UUID, ctx: Ctx, session: DB) -> dict[str, str]:
     return await cx_svc.reveal_contact(session, ctx, case_id)
+
+
+@router.post(
+    "/cx/retention-analysis",
+    summary="Analyze customer feedback and formulate autonomous retention remediation (Meta Llama 3)",
+)
+async def analyze_retention(data: RetentionAnalysisIn, ctx: Ctx, session: DB) -> RetentionAnalysisOut:
+    return await cx_svc.analyze_retention(session, ctx, data)
+

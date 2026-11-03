@@ -8,14 +8,15 @@ from typing import Literal
 from ..errors import AINotConfiguredError
 from .base import AIProvider
 
-ProviderName = Literal["openai", "openai_compatible", "ollama", "anthropic", "none"]
+ProviderName = Literal["openai", "openai_compatible", "ollama", "meta_llama", "anthropic", "none"]
 Tier = Literal["fast", "smart"]
 
 #: Sensible defaults per provider: (fast/cheap model, smart/powerful model).
 #: All of them are overridable with AI_MODEL_FAST / AI_MODEL_SMART.
 DEFAULT_MODELS: dict[str, tuple[str, str]] = {
     "openai": ("gpt-4.1-mini", "gpt-4.1"),
-    "ollama": ("qwen2.5:7b", "qwen2.5:7b"),
+    "ollama": ("llama3.2:3b", "llama3.3:70b"),
+    "meta_llama": ("meta-llama/Llama-3.2-3B-Instruct", "meta-llama/Llama-3.3-70B-Instruct"),
     "anthropic": ("claude-haiku-5-5", "claude-sonnet-5-5"),
 }
 
@@ -82,6 +83,21 @@ def build_provider(cfg: ProviderConfig) -> tuple[AIProvider, ModelTiers]:
         )
         return provider, _tiers("openai", cfg.model_fast, cfg.model_smart)
 
+    if name == "meta_llama":
+        from .openai_provider import OpenAIProvider
+
+        # Default to Groq or custom vLLM/OpenAI-compatible inference gateway for Meta Llama
+        base_url = cfg.openai_base_url or "https://api.groq.com/openai/v1"
+        provider = OpenAIProvider(
+            api_key=cfg.openai_api_key or "not-needed",
+            base_url=base_url,
+            name=cfg.name or "meta_llama",
+            structured_mode=cfg.openai_structured_mode,
+            timeout_s=cfg.timeout_s,
+            max_retries=cfg.max_retries,
+        )
+        return provider, _tiers("meta_llama", cfg.model_fast, cfg.model_smart)
+
     if name == "openai_compatible":
         if not cfg.openai_base_url:
             raise AINotConfiguredError("AI_PROVIDER=openai_compatible requires OPENAI_BASE_URL.")
@@ -114,7 +130,7 @@ def build_provider(cfg: ProviderConfig) -> tuple[AIProvider, ModelTiers]:
         return provider, _tiers("anthropic", cfg.model_fast, cfg.model_smart)
 
     raise AINotConfiguredError(
-        "No AI provider configured. Set AI_PROVIDER (openai | openai_compatible | ollama | anthropic)."
+        "No AI provider configured. Set AI_PROVIDER (meta_llama | openai | openai_compatible | ollama | anthropic)."
     )
 
 

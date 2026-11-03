@@ -1,5 +1,6 @@
 from .adaptive_interviewer import AdaptiveInterviewerAgent
 from .base import Agent
+from .cx_retention_agent import CXRetentionAgent
 from .insight_agents import DataAnalystAgent, RecommendationAgent
 from .measurement_architect import ArchitectInput, MeasurementArchitectAgent, detect_language
 from .question_reviewer import QuestionReviewerAgent
@@ -12,6 +13,7 @@ __all__ = [
     "AdaptiveInterviewerAgent",
     "Agent",
     "ArchitectInput",
+    "CXRetentionAgent",
     "DataAnalystAgent",
     "MeasurementArchitectAgent",
     "QuestionReviewerAgent",

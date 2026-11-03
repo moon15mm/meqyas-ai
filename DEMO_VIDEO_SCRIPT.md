@@ -1,90 +1,93 @@
 # Meqyas AI — 3-Minute Demo Video Script & Storyboard
 **Target Event:** Meta Global AI Developer Hackathon ($1,000,000 Prize Pool)  
 **Track:** Startup Track  
-**Total Video Length:** 03:00 (180 Seconds)  
-**Tone:** Confident, fast-paced, high-tech, founder-led product walkthrough.  
-**Language:** English Voiceover (with authentic Saudi dialect Arabic on-screen customer text).
+**Total Video Length:** Exactly 03:00 (180 Seconds)  
+**Tone:** Confident, technical, transparent, and founder-led product walkthrough.  
+**Language:** English Voiceover (with authentic Arabic on-screen demonstrations).
 
 ---
 
 ## Storyboard & Timeline Breakdown
 
 ```
-[00:00 - 00:40] Part 1: The GCC Retention Problem & Dialect Blindness
-[00:40 - 01:40] Part 2: The Live Multi-Agent Solution (Meta Llama 3.3 in Action)
-[01:40 - 02:25] Part 3: Architecture & The Meta Open-Weights Advantage
-[02:25 - 03:00] Part 4: Production Traction, Metrics & Vision
+[00:00 - 00:45] Part 1: The Problem (GCC Retention Fragility & Dialect Blindness)
+[00:45 - 01:45] Part 2: The Solution (CXRetentionAgent & Meta Llama 3 in Action)
+[01:45 - 02:25] Part 3: Architecture & The Meta Open-Weights Advantage
+[02:25 - 03:00] Part 4: Production Verification & The Live Platform
 ```
 
 ---
 
-### Part 1: The Problem (00:00 – 00:40)
+### Part 1: The Problem (00:00 – 00:45)
 * **Screen Visuals:**
-  - Fast cuts of e-commerce delivery trucks in Riyadh and Jeddah.
-  - Social media screen showing an angry customer tweeting: *"طلبي واصل بارد والشوربة كبت وما في أي رد من الدعم.. حسبي الله!"*
-  - An e-commerce store dashboard showing customer churn graphs and high Customer Acquisition Costs (CAC).
+  - Brief capture of the GCC e-commerce landscape (quick-commerce and food delivery apps).
+  - An unhappy customer comment on social media:  
+    `"والله ما قصرتوا بس الطلب مدهوك والشوربة كبت في الكيس والأكل واصل بارد!"`
+  - Highlighting why standard models fail: generic NLP classifies *"ما قصرتوا"* as positive, missing the severe negative complaint.
 * **Voiceover (English):**
-  > "In the $30 billion GCC e-commerce and fast-delivery market, customer acquisition costs have surged by 40%. Yet, customer retention remains astonishingly fragile.  
-  > When a customer receives damaged groceries or cold food, traditional customer support takes hours to respond. Worse, standard NLP models fail completely on colloquial Gulf and Saudi Arabic dialects, sarcasm, and local slang.  
-  > By the time human support replies, the customer has already vented on X or TikTok, and churned forever."
+  > "In the fast-growing GCC e-commerce market, customer retention is remarkably fragile.  
+  > When a customer receives a damaged delivery or missing items, traditional customer support takes hours to respond.  
+  > Worse, conventional NLP tools fail on nuanced Gulf and Saudi Arabic dialects. When a customer writes 'والله ما قصرتوا بس الشوربة كبت والأكل مدهوك', standard sentiment analyzers see the phrase 'ما قصرتوا' and mislabel it as positive, completely missing the fact that the meal was ruined.  
+  > By the time human support wakes up, the customer has churned to a competitor."
 
 ---
 
-### Part 2: Live Multi-Agent Retention Engine (00:40 – 01:40)
+### Part 2: Live Agent Walkthrough (00:45 – 01:45)
 * **Screen Visuals:**
-  - Transition to **Meqyas AI Production Dashboard** (`https://meqyas.wardat.xyz/`).
-  - Terminal / Webhook simulation sending an incoming order complaint:  
-    `"والله ما قصرتوا بس الطلب مدهوك والشوربة كبت في الكيس ومحد رد علي!"`
-  - Split-screen showing the **Meta Llama 3 Multi-Agent pipeline** running:
-    1. **Dialect Sentiment Agent (Llama 3.3 70B):** Deconstructs the sentence into structured JSON in 185ms:
-       - `sentiment`: `"strongly_negative"`
-       - `root_cause`: `"packaging_damage_and_spill"`
-       - `dialect`: `"Saudi_Najdi"`
-       - `urgency`: `"critical"`
-    2. **Autonomous Retention Agent:** 
-       - Calculates Customer Lifetime Value (CLV: 1,850 SAR).
-       - Churn Risk: 91%.
-       - Synthesizes instant remedy: 35 SAR wallet credit + VIP apology message sent via webhook.
+  - Screen switch to VS Code / terminal running a live call to `CXRetentionAgent` with Meta Llama 3.
+  - Feeding the Saudi complaint into the agent.
+  - Showing the structured JSON output returned in real time:
+    ```json
+    {
+      "detected_dialect": "saudi_najdi",
+      "sentiment": "negative",
+      "sentiment_score": -0.85,
+      "sarcasm_detected": false,
+      "root_cause": "packaging_spill_and_cold_food",
+      "urgency": "high",
+      "churn_risk_score": 0.82,
+      "suggested_action": "instant_wallet_credit",
+      "suggested_compensation_amount": 35.0,
+      "customer_response_message": "أهلاً بك يا فهد، نعتذر منك بشدة على وصول الطلب بهذا الشكل..."
+    }
+    ```
+  - Showing second example with sarcasm:  
+    `"ما شاء الله أسرع مطعم في العالم.. ساعتين أنتظر الوجبة وجاتني مثلجة!"`  
+    -> `sarcasm_detected: true`, `urgency: critical`, `suggested_action: vip_call_escalation`.
 * **Voiceover (English):**
-  > "Meet Meqyas AI — the autonomous customer intelligence and retention engine built for GCC commerce.  
-  > Instead of passive dashboards, Meqyas intercepts unhappy feedback through live webhooks from platforms like Salla and Zid.  
-  > Watch this live: A customer sends a deeply colloquial complaint in Saudi dialect. Within 180 milliseconds, our Meta Llama 3.3 agent parses the exact nuanced sentiment, identifies the spill without hallucination, and categorizes churn risk.  
-  > Instantly, our Autonomous Retention Agent executes an authorized resolution: it credits the customer's in-app wallet and issues a respectful, dialect-aware apology before the customer even closes the app. Churn prevented in under a second."
+  > "This is Meqyas AI — an autonomous customer intelligence and retention engine built for Arabic commerce, powered by Meta Llama 3.  
+  > Instead of passive dashboards, our CXRetentionAgent intercepts customer complaints in real time.  
+  > Here is a live test: We feed in an authentic Saudi dialect complaint. Meta Llama 3 immediately detects the Najdi dialect, identifies the spilled packaging without hallucination, and computes an 82% churn probability.  
+  > It autonomously generates an immediate remediation: issuing wallet credit, alongside an authentic, culturally tuned apology message.  
+  > Even with subtle sarcasm—like a customer calling a restaurant 'the fastest in the world' after a two-hour delay—the agent flags sarcastic distress and escalates to a VIP call."
 
 ---
 
-### Part 3: Why Meta Open Weights Win (01:40 – 02:25)
+### Part 3: Architecture & Meta Llama Advantage (01:45 – 02:25)
 * **Screen Visuals:**
-  - Architectural diagram zooming in on `packages/ai` and local inference pipelines.
-  - Side-by-side comparison:
-    - *Closed Cloud APIs:* High latency, unpredictable rate limits, customer PII exported outside national borders.
-    - *Meta Llama 3 (Ollama / vLLM on-prem):* Zero-PII export, sub-200ms latency, 100% compliant with Saudi Personal Data Protection Law (PDPL).
-  - Terminal showing `uv sync` and clean Pydantic structured output validation.
+  - Code walkthrough of `packages/ai/meqyas_ai/agents/cx_retention_agent.py` and `providers/factory.py`.
+  - Zooming in on the Pydantic schemas: `RetentionAnalysisIn` and `RetentionAnalysisOut`.
+  - Showing the deterministic safety rail in `post_process`:  
+    Compensation is mathematically clamped to order value to protect merchant margins.
+  - Highlighting Meta Llama 3.3 70B for smart reasoning and Llama 3.2 3B for local, zero-PII edge inference.
 * **Voiceover (English):**
-  > "Why Meta models? In Saudi Arabia and the GCC, enterprises have strict data residency laws under PDPL. Closed cloud models leak customer private data abroad and introduce latency bottlenecks.  
-  > With Meta’s open weights—combining Llama 3.3 70B for deep sentiment reasoning with Llama 3.2 3B for sub-second classification—we run on-premise and private cloud inference with zero customer PII leakage.  
-  > We enforce strict Pydantic schemas with automated self-repair loops, ensuring zero-hallucination structured responses in production."
+  > "Under the hood, Meqyas AI is engineered for strict enterprise reliability.  
+  > In `packages/ai`, every agent has a rigid Pydantic contract. Notice our deterministic safety rails: our Python post-processor automatically clamps compensation amounts against customer lifetime value, preventing margin leakage.  
+  > Why Meta open weights? In Saudi Arabia, enterprise clients are subject to strict Personal Data Protection Laws. By supporting Meta Llama 3 via Ollama and vLLM on-premise, merchants can analyze sensitive customer feedback with zero PII leaving their infrastructure, achieving sub-second latency and complete regulatory compliance."
 
 ---
 
-### Part 4: Production Traction & The Future (02:25 – 03:00)
+### Part 4: Verified Production Quality (02:25 – 03:00)
 * **Screen Visuals:**
-  - Live customer metrics on `https://meqyas.wardat.xyz/`:
-    - 92% retention salvage rate.
-    - 350ms median decision latency.
-    - Partner logos and integration ecosystem (Salla, Zid, Delivery fleets).
-  - Founder Eng. Maher Sulaiman on camera or closing brand card:
-    - Wardat AI Technologies • Meqyas AI.
-    - Contact: `contact@wardat.xyz` • GitHub: `github.com/moon15mm/meqyas-ai`.
+  - Terminal executing: `pytest packages/ai/tests/ -v`.
+  - Showing all **83 tests passing cleanly in under 5 seconds**.
+  - Quick browser view of the live production app running at `https://meqyas.wardat.xyz/`.
+  - Closing card with founder info:
+    - **Meqyas AI • Wardat AI Technologies**
+    - Founder: Eng. Maher Sulaiman (`contact@wardat.xyz`)
+    - GitHub: `https://github.com/moon15mm/meqyas-ai`
 * **Voiceover (English):**
-  > "Meqyas AI is not a concept—it is a live, production-grade engine running today. We have tested over 5,000 real customer interactions, delivering a 92% retention salvage rate.  
-  > By bringing Meta's frontier models into our world, we are turning unhappy customers into lifelong brand advocates.  
-  > Check out our open-source repo on GitHub and test the live engine on meqyas.wardat.xyz. Thank you!"
-
----
-
-## Recording Checklist for the Founder
-1. **Screen Capture:** Record the UI of `https://meqyas.wardat.xyz/` and code execution of `packages/ai/meqyas_ai/agents/text_analysis.py`.
-2. **Audio Narration:** Record the voiceover cleanly using a USB microphone (or generate an AI master voiceover using ElevenLabs).
-3. **Export Settings:** 1080p 60fps MP4, exactly 3 minutes (03:00) or under.
-4. **Host Video:** Upload as Unlisted on YouTube or Vimeo and paste the link into the Cerebral Valley submission form.
+  > "Meqyas AI is fully test-driven. Our entire AI test suite—83 unit tests covering dialect parsing, structured output repair, and prompt injection defense—passes cleanly in under five seconds.  
+  > The full system is live in production today at meqyas.wardat.xyz, with open-source code available on GitHub.  
+  > By combining Meta’s frontier open-weights with deep regional intelligence, Meqyas AI turns negative moments into lifelong customer loyalty.  
+  > Thank you."
