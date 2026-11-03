@@ -36,7 +36,7 @@ code["tiers"]["lines"].append("}")
 (DATA / "code.json").write_text(json.dumps(code, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 run = subprocess.run(
-    ["uv", "run", "--frozen", "pytest", "packages/ai/tests", "-vv", "-p", "no:cacheprovider", "--color=no"],
+    ["uv", "run", "--frozen", "pytest", "packages/ai/tests", "-vv", "-p", "no:cacheprovider", "--color=no"],  # noqa: S607
     cwd=ROOT,
     capture_output=True,
     text=True,

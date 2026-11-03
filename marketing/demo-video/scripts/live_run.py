@@ -75,7 +75,9 @@ async def main() -> int:
         print(f"{key}: {res.record.model} · {res.record.latency_ms} ms · attempts={res.record.attempts}")
 
     OUT.write_text(
-        json.dumps({"recorded_at": datetime.now(UTC).isoformat(timespec="seconds"), **results}, ensure_ascii=False, indent=2)
+        json.dumps(
+            {"recorded_at": datetime.now(UTC).isoformat(timespec="seconds"), **results}, ensure_ascii=False, indent=2
+        )
         + "\n",
         encoding="utf-8",
     )
