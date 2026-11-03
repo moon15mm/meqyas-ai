@@ -1,0 +1,63 @@
+{
+  "schema": {
+    "path": "packages/ai/meqyas_ai/schemas/retention.py",
+    "first_line": 59,
+    "lines": [
+      "class RetentionAnalysisOut(BaseModel):",
+      "    model_config = ConfigDict(extra=\"forbid\")",
+      "",
+      "    detected_dialect: ArabicDialect = Field(description=\"Detected Arabic dialect or vernacular\")",
+      "    sentiment: SentimentLabel = Field(description=\"Categorical sentiment label\")",
+      "    sentiment_score: float = Field(ge=-1.0, le=1.0, description=\"Continuous sentiment from -1.0 to +1.0\")",
+      "    sarcasm_detected: bool = Field(description=\"True if criticism is masked as superficial praise\")",
+      "    root_cause: str = Field(description=\"Specific operational root cause: e.g. packaging_spill, courier_delay\")",
+      "    urgency: UrgencyLevel = Field(description=\"Operational urgency level\")",
+      "    churn_risk_score: float = Field(ge=0.0, le=1.0, description=\"Probability of customer churn (0.0 to 1.0)\")",
+      "    churn_risk_factors: list[str] = Field(default_factory=list, description=\"Key factors contributing to churn risk\")",
+      "    suggested_action: ActionType = Field(description=\"Autonomous remediation action\")",
+      "    suggested_compensation_amount: float = Field(ge=0.0, description=\"Suggested compensation value in SAR\")",
+      "    customer_response_message: str = Field(description=\"Empathetic, dialect-calibrated response message in Arabic\")",
+      "    internal_ops_summary: str = Field(description=\"Internal diagnostic summary for store managers\")"
+    ]
+  },
+  "post_process": {
+    "path": "packages/ai/meqyas_ai/agents/cx_retention_agent.py",
+    "first_line": 100,
+    "lines": [
+      "    def post_process(self, data: RetentionAnalysisIn, output: RetentionAnalysisOut) -> RetentionAnalysisOut:",
+      "        \"\"\"Deterministic safety rails and policy guardrails.\"\"\"",
+      "        # Policy rule: Compensation amount cannot exceed order amount for non-VIPs (CLV < 500 SAR)",
+      "        order_amt = data.order_amount or 0.0",
+      "        clv = data.customer_clv or 0.0",
+      "        comp = output.suggested_compensation_amount",
+      "",
+      "        if clv < 500.0 and order_amt > 0.0 and comp > order_amt:",
+      "            # Clamp compensation to order amount max",
+      "            output = output.model_copy(update={\"suggested_compensation_amount\": order_amt})",
+      "",
+      "        # Policy rule: Positive sentiment must not trigger churn compensation",
+      "        if output.sentiment == SentimentLabel.POSITIVE and comp > 0.0:",
+      "            output = output.model_copy(",
+      "                update={",
+      "                    \"suggested_compensation_amount\": 0.0,",
+      "                    \"suggested_action\": ActionType.THANK_YOU_NOTE,",
+      "                    \"churn_risk_score\": min(output.churn_risk_score, 0.1),",
+      "                }",
+      "            )",
+      "",
+      "        return output"
+    ]
+  },
+  "tiers": {
+    "path": "packages/ai/meqyas_ai/providers/factory.py",
+    "first_line": 16,
+    "lines": [
+      "DEFAULT_MODELS: dict[str, tuple[str, str]] = {",
+      "    \"openai\": (\"gpt-4.1-mini\", \"gpt-4.1\"),",
+      "    \"ollama\": (\"llama3.2:3b\", \"llama3.3:70b\"),",
+      "    \"meta_llama\": (\"meta-llama/Llama-3.2-3B-Instruct\", \"meta-llama/Llama-3.3-70B-Instruct\"),",
+      "    \"anthropic\": (\"claude-haiku-5-5\", \"claude-sonnet-5-5\"),",
+      "}"
+    ]
+  }
+}
