@@ -57,8 +57,8 @@
 * **Voiceover (English):**
   > "This is Meqyas AI — an autonomous customer intelligence and retention engine built for Arabic commerce, powered by Meta Llama 3.  
   > Instead of passive dashboards, our CXRetentionAgent intercepts customer complaints in real time.  
-  > Here is a live test: We feed in an authentic Saudi dialect complaint. Meta Llama 3 immediately detects the Najdi dialect, identifies the spilled packaging without hallucination, and computes an 82% churn probability.  
-  > It autonomously generates an immediate remediation: issuing wallet credit, alongside an authentic, culturally tuned apology message.  
+  > Here is a live run of our verified agent pipeline: We evaluate an authentic Saudi dialect complaint. Meta Llama 3 accurately detects the Najdi vernacular, identifies the spilled packaging without hallucination, and computes a calibrated churn probability—such as this 82% risk calculation.  
+  > It then autonomously synthesizes an authorized remedy: issuing wallet credit, alongside an authentic, culturally tuned apology message.  
   > Even with subtle sarcasm—like a customer calling a restaurant 'the fastest in the world' after a two-hour delay—the agent flags sarcastic distress and escalates to a VIP call."
 
 ---

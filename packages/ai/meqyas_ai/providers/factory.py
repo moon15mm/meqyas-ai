@@ -96,7 +96,13 @@ def build_provider(cfg: ProviderConfig) -> tuple[AIProvider, ModelTiers]:
             timeout_s=cfg.timeout_s,
             max_retries=cfg.max_retries,
         )
-        return provider, _tiers("meta_llama", cfg.model_fast, cfg.model_smart)
+        fast = cfg.model_fast
+        smart = cfg.model_smart
+        # Use Groq native model IDs if targeting Groq without explicit model overrides
+        if not fast and not smart and "groq.com" in base_url.lower():
+            fast = "llama-3.1-8b-instant"
+            smart = "llama-3.3-70b-versatile"
+        return provider, _tiers("meta_llama", fast, smart)
 
     if name == "openai_compatible":
         if not cfg.openai_base_url:

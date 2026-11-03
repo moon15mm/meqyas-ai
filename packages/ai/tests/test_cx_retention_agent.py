@@ -150,12 +150,23 @@ async def test_retention_agent_clamps_compensation_safeguards() -> None:
 
 
 def test_meta_llama_provider_factory() -> None:
-    cfg = ProviderConfig(
+    # Test Groq auto-detection
+    cfg_groq = ProviderConfig(
         provider="meta_llama",
         openai_api_key="mock_key",
         openai_base_url="https://api.groq.com/openai/v1",
     )
-    provider, tiers = build_provider(cfg)
+    provider, tiers = build_provider(cfg_groq)
     assert provider.name == "meta_llama"
-    assert tiers.fast == "meta-llama/Llama-3.2-3B-Instruct"
-    assert tiers.smart == "meta-llama/Llama-3.3-70B-Instruct"
+    assert tiers.fast == "llama-3.1-8b-instant"
+    assert tiers.smart == "llama-3.3-70b-versatile"
+
+    # Test standard vLLM / HuggingFace defaults
+    cfg_vllm = ProviderConfig(
+        provider="meta_llama",
+        openai_api_key="mock_key",
+        openai_base_url="http://localhost:8000/v1",
+    )
+    _, tiers_vllm = build_provider(cfg_vllm)
+    assert tiers_vllm.fast == "meta-llama/Llama-3.2-3B-Instruct"
+    assert tiers_vllm.smart == "meta-llama/Llama-3.3-70B-Instruct"
