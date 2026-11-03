@@ -32,7 +32,7 @@ from ..domain import stats
 from ..domain.enums import CaseReason, CaseStatus, QualityStatus, QuestionType
 from ..domain.permissions import Permission
 from ..domain.survey.document import QuestionDoc, SurveyDoc
-from ..models import Answer, CxCase, Project, Response, StoreLocation, Survey, User
+from ..models import Answer, CxCase, Organization, Project, Response, StoreLocation, Survey, User
 from . import analytics
 from .audit import audit
 from .projects import get_owned
@@ -469,6 +469,7 @@ async def analyze_retention(
 ) -> Any:
     """Analyze customer interaction and formulate retention remediation using Meta Llama 3."""
     from meqyas_ai.agents.cx_retention_agent import CXRetentionAgent
+
     from . import ai as ai_svc
 
     org = await session.get(Organization, ctx.organization_id)
@@ -484,4 +485,3 @@ async def analyze_retention(
         entity_type="cx_retention",
     )
     return result.output
-

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from meqyas_ai.agents.cx_retention_agent import CXRetentionAgent
 from meqyas_ai.providers.factory import ModelTiers, ProviderConfig, build_provider
 from meqyas_ai.runtime import AgentRunner
@@ -74,7 +73,7 @@ async def test_retention_agent_analyzes_saudi_dialect_complaint() -> None:
 
 @pytest.mark.asyncio
 async def test_retention_agent_detects_sarcasm() -> None:
-    runner, provider = _runner(
+    runner, _provider = _runner(
         [
             {
                 "detected_dialect": "saudi_hijazi",

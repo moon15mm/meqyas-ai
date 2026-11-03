@@ -12,10 +12,10 @@ import uuid
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query, status
+from meqyas_ai.schemas.retention import RetentionAnalysisIn, RetentionAnalysisOut
 
 from ...schemas.common import OkOut
 from ...schemas.cx import CaseFilter, CaseOut, CasePatch, LocationIn, LocationOut, LocationPatch
-from meqyas_ai.schemas.retention import RetentionAnalysisIn, RetentionAnalysisOut
 from ...services import cx as cx_svc
 from ...services import locations as location_svc
 from ..deps import DB, Ctx, feature
@@ -75,4 +75,3 @@ async def reveal_contact(case_id: uuid.UUID, ctx: Ctx, session: DB) -> dict[str,
 )
 async def analyze_retention(data: RetentionAnalysisIn, ctx: Ctx, session: DB) -> RetentionAnalysisOut:
     return await cx_svc.analyze_retention(session, ctx, data)
-

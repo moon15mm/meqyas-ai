@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class ArabicDialect(str, Enum):
+class ArabicDialect(StrEnum):
     NAJDI = "saudi_najdi"
     HIJAZI = "saudi_hijazi"
     EASTERN = "saudi_eastern"
@@ -20,21 +20,21 @@ class ArabicDialect(str, Enum):
     OTHER = "other"
 
 
-class SentimentLabel(str, Enum):
+class SentimentLabel(StrEnum):
     POSITIVE = "positive"
     NEUTRAL = "neutral"
     NEGATIVE = "negative"
     CRITICAL_CHURN = "critical_churn"
 
 
-class UrgencyLevel(str, Enum):
+class UrgencyLevel(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
 
 
-class ActionType(str, Enum):
+class ActionType(StrEnum):
     INSTANT_WALLET_CREDIT = "instant_wallet_credit"
     DISCOUNT_COUPON = "discount_coupon"
     FREE_REPLACEMENT = "free_replacement"

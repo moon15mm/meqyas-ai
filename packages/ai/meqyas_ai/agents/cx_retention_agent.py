@@ -14,11 +14,9 @@ from ..guard import UNTRUSTED_NOTICE, UntrustedItem, envelope
 from ..providers.base import Message
 from ..schemas.retention import (
     ActionType,
-    ArabicDialect,
     RetentionAnalysisIn,
     RetentionAnalysisOut,
     SentimentLabel,
-    UrgencyLevel,
 )
 from .base import Agent
 
@@ -99,9 +97,7 @@ class CXRetentionAgent(Agent[RetentionAnalysisIn, RetentionAnalysisOut, Retentio
             Message(role="user", content=user_content),
         ]
 
-    def post_process(
-        self, data: RetentionAnalysisIn, output: RetentionAnalysisOut
-    ) -> RetentionAnalysisOut:
+    def post_process(self, data: RetentionAnalysisIn, output: RetentionAnalysisOut) -> RetentionAnalysisOut:
         """Deterministic safety rails and policy guardrails."""
         # Policy rule: Compensation amount cannot exceed order amount for non-VIPs (CLV < 500 SAR)
         order_amt = data.order_amount or 0.0
