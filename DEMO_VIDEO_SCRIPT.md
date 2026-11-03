@@ -69,7 +69,7 @@
   - Zooming in on the Pydantic schemas: `RetentionAnalysisIn` and `RetentionAnalysisOut`.
   - Showing the deterministic safety rail in `post_process`:  
     Compensation is mathematically clamped to order value to protect merchant margins.
-  - Highlighting Meta Llama 3.3 70B for smart reasoning and Llama 3.2 3B for local, zero-PII edge inference.
+  - Highlighting Meta Llama 3 tiered inference: Llama 3.3 70B for smart reasoning alongside lightweight fast models (Llama 3.1 8B via Groq or Llama 3.2 3B via edge/vLLM) for zero-PII real-time processing.
 * **Voiceover (English):**
   > "Under the hood, Meqyas AI is engineered for strict enterprise reliability.  
   > In `packages/ai`, every agent has a rigid Pydantic contract. Notice our deterministic safety rails: our Python post-processor automatically clamps compensation amounts against customer lifetime value, preventing margin leakage.  

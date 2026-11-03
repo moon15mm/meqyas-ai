@@ -161,6 +161,17 @@ def test_meta_llama_provider_factory() -> None:
     assert tiers.fast == "llama-3.1-8b-instant"
     assert tiers.smart == "llama-3.3-70b-versatile"
 
+    # Test Groq partial override (e.g. only fast or only smart provided)
+    cfg_groq_partial = ProviderConfig(
+        provider="meta_llama",
+        openai_api_key="mock_key",
+        openai_base_url="https://api.groq.com/openai/v1",
+        model_smart="llama-3.3-70b-custom",
+    )
+    _, tiers_partial = build_provider(cfg_groq_partial)
+    assert tiers_partial.fast == "llama-3.1-8b-instant"
+    assert tiers_partial.smart == "llama-3.3-70b-custom"
+
     # Test standard vLLM / HuggingFace defaults
     cfg_vllm = ProviderConfig(
         provider="meta_llama",

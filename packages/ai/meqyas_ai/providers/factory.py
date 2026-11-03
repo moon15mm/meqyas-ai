@@ -99,9 +99,9 @@ def build_provider(cfg: ProviderConfig) -> tuple[AIProvider, ModelTiers]:
         fast = cfg.model_fast
         smart = cfg.model_smart
         # Use Groq native model IDs if targeting Groq without explicit model overrides
-        if not fast and not smart and "groq.com" in base_url.lower():
-            fast = "llama-3.1-8b-instant"
-            smart = "llama-3.3-70b-versatile"
+        if "groq.com" in base_url.lower():
+            fast = fast or "llama-3.1-8b-instant"
+            smart = smart or "llama-3.3-70b-versatile"
         return provider, _tiers("meta_llama", fast, smart)
 
     if name == "openai_compatible":
