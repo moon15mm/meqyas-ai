@@ -1,0 +1,58 @@
+[project]
+name = "meqyas"
+version = "1.0.0"
+description = "MEQYAS AI — Python workspace root (apps/api + packages/ai)"
+requires-python = ">=3.12,<3.14"
+dependencies = ["meqyas-api", "meqyas-ai"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+meqyas-api = { workspace = true }
+meqyas-ai = { workspace = true }
+
+[tool.uv.workspace]
+members = ["apps/api", "packages/ai"]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "pytest-cov>=5.0",
+  "ruff>=0.7",
+  "fakeredis>=2.25",
+  "scipy>=1.14",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["apps/api/alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF"]
+ignore = [
+  "E501",   # long lines are handled by `ruff format`; long Arabic strings are intentional
+  "UP046",  # Generic[...] subclasses are fine (PEP 695 syntax not required)
+  "UP047",
+  "S101",   # assert in tests
+  "B008",   # FastAPI Depends() in defaults
+  "RUF001", # Arabic letters are intentional in strings
+  "RUF002",
+  "RUF003",
+  "S105",   # false positives on token type names
+  "S106",
+  "RUF012",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S", "B011"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["packages/ai/tests", "apps/api/tests"]
+addopts = "-q --import-mode=importlib"
+filterwarnings = ["ignore::DeprecationWarning:passlib.*"]

@@ -1,0 +1,115 @@
+"""Shared measurement vocabulary. Mirrored in TypeScript at
+``packages/shared/src/enums.ts`` — keep both in sync (a parity test checks it)."""
+
+from __future__ import annotations
+
+from enum import StrEnum
+
+
+class MeasurementType(StrEnum):
+    SATISFACTION = "SATISFACTION"
+    PERCEPTION = "PERCEPTION"
+    EXPERIENCE = "EXPERIENCE"
+    NEEDS_ASSESSMENT = "NEEDS_ASSESSMENT"
+    AWARENESS = "AWARENESS"
+    KNOWLEDGE = "KNOWLEDGE"
+    SKILLS = "SKILLS"
+    BEHAVIOR = "BEHAVIOR"
+    ENGAGEMENT = "ENGAGEMENT"
+    PROGRAM_EVALUATION = "PROGRAM_EVALUATION"
+    TRAINING_EVALUATION = "TRAINING_EVALUATION"
+    OUTCOME = "OUTCOME"
+    IMPACT = "IMPACT"
+    PRE_POST = "PRE_POST"
+    LONGITUDINAL = "LONGITUDINAL"
+    EVENT_EVALUATION = "EVENT_EVALUATION"
+    EMPLOYEE_PULSE = "EMPLOYEE_PULSE"
+    CUSTOMER_FEEDBACK = "CUSTOMER_FEEDBACK"
+
+
+class OutcomeLevel(StrEnum):
+    REACTION = "REACTION"
+    NEED = "NEED"
+    LEARNING = "LEARNING"
+    BEHAVIOR = "BEHAVIOR"
+    RESULTS = "RESULTS"
+    COMPOSITE = "COMPOSITE"
+    DESIGN = "DESIGN"
+
+
+class MeasurementDesign(StrEnum):
+    POST_ONLY = "POST_ONLY"
+    RETROSPECTIVE_PRE_POST = "RETROSPECTIVE_PRE_POST"
+    PRE_POST = "PRE_POST"
+    PRE_POST_FOLLOW_UP = "PRE_POST_FOLLOW_UP"
+    REPEATED = "REPEATED"
+    COMPARISON_GROUP = "COMPARISON_GROUP"
+
+
+class WaveType(StrEnum):
+    BASELINE = "BASELINE"
+    MIDLINE = "MIDLINE"
+    POST = "POST"
+    FOLLOW_UP = "FOLLOW_UP"
+    SINGLE = "SINGLE"
+    ROUND = "ROUND"
+
+
+class EvidenceLevel(StrEnum):
+    DESCRIPTIVE = "DESCRIPTIVE"
+    PERCEIVED_CHANGE = "PERCEIVED_CHANGE"
+    CHANGE = "CHANGE"
+    CHANGE_PERSISTENCE = "CHANGE_PERSISTENCE"
+    TREND = "TREND"
+    CONTRIBUTION = "CONTRIBUTION"
+    ATTRIBUTION = "ATTRIBUTION"
+
+
+class IndicatorType(StrEnum):
+    PERCENTAGE = "PERCENTAGE"
+    AVERAGE_SCORE = "AVERAGE_SCORE"
+    COUNT = "COUNT"
+    RATE = "RATE"
+    CHANGE = "CHANGE"
+    DIFFERENCE = "DIFFERENCE"
+    EFFECT_SIZE = "EFFECT_SIZE"
+    CUSTOM = "CUSTOM"
+
+
+class IndicatorFrequency(StrEnum):
+    ONCE = "ONCE"
+    PER_WAVE = "PER_WAVE"
+    WEEKLY = "WEEKLY"
+    MONTHLY = "MONTHLY"
+    QUARTERLY = "QUARTERLY"
+    CONTINUOUS = "CONTINUOUS"
+
+
+class IndicatorDirection(StrEnum):
+    HIGHER_IS_BETTER = "HIGHER_IS_BETTER"
+    LOWER_IS_BETTER = "LOWER_IS_BETTER"
+
+
+class QuestionType(StrEnum):
+    SHORT_TEXT = "SHORT_TEXT"
+    LONG_TEXT = "LONG_TEXT"
+    SINGLE_CHOICE = "SINGLE_CHOICE"
+    MULTIPLE_CHOICE = "MULTIPLE_CHOICE"
+    DROPDOWN = "DROPDOWN"
+    RATING = "RATING"
+    STAR = "STAR"
+    LIKERT = "LIKERT"
+    MATRIX = "MATRIX"
+    RANKING = "RANKING"
+    SLIDER = "SLIDER"
+    NPS = "NPS"
+    CSAT = "CSAT"
+    CES = "CES"
+    NUMBER = "NUMBER"
+    DATE = "DATE"
+    FILE = "FILE"
+    INFORMATION = "INFORMATION"
+    SECTION = "SECTION"
+
+
+Language = str  # "ar" | "en" — kept as plain str for schema simplicity

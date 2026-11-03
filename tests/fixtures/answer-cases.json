@@ -1,0 +1,122 @@
+{
+  "description": "Shared answer-validation fixtures. Executed by apps/api/tests/unit/test_survey_answers.py AND packages/shared/tests/validate.test.ts — both validators must agree. expected = error code or null.",
+  "questions": {
+    "short": { "key": "short", "type": "SHORT_TEXT", "text": "الاسم المستعار", "required": true, "validation": { "min_length": 2, "max_length": 10 } },
+    "pattern": { "key": "pattern", "type": "SHORT_TEXT", "text": "رمز", "validation": { "pattern": "^[A-Z]{2}[0-9]{2}$" } },
+    "long": { "key": "long", "type": "LONG_TEXT", "text": "ملاحظاتك" },
+    "likert": {
+      "key": "likert",
+      "type": "LIKERT",
+      "text": "أشعر بالثقة",
+      "required": true,
+      "scale": { "min": 1, "max": 5 },
+      "options": [
+        { "value": "1", "label": "أعارض بشدة" },
+        { "value": "2", "label": "أعارض" },
+        { "value": "3", "label": "محايد" },
+        { "value": "4", "label": "أوافق" },
+        { "value": "5", "label": "أوافق بشدة" }
+      ]
+    },
+    "nps": { "key": "nps", "type": "NPS", "text": "ما احتمال أن توصي؟", "scale": { "min": 0, "max": 10 } },
+    "number": { "key": "number", "type": "NUMBER", "text": "عدد الساعات", "validation": { "min": 0, "max": 40 } },
+    "slider": { "key": "slider", "type": "SLIDER", "text": "المستوى", "scale": { "min": 0, "max": 100, "step": 5 } },
+    "single": {
+      "key": "single",
+      "type": "SINGLE_CHOICE",
+      "text": "الصف",
+      "required": true,
+      "options": [
+        { "value": "10", "label": "الأول" },
+        { "value": "11", "label": "الثاني" },
+        { "value": "other", "label": "أخرى", "is_other": true }
+      ]
+    },
+    "multi": {
+      "key": "multi",
+      "type": "MULTIPLE_CHOICE",
+      "text": "الأدوات المستخدمة",
+      "validation": { "min_choices": 1, "max_choices": 2 },
+      "options": [
+        { "value": "a", "label": "أ" },
+        { "value": "b", "label": "ب" },
+        { "value": "c", "label": "ج" },
+        { "value": "none", "label": "لا شيء", "is_exclusive": true }
+      ]
+    },
+    "matrix": {
+      "key": "matrix",
+      "type": "MATRIX",
+      "text": "قيّمي",
+      "required": true,
+      "options": [
+        { "value": "1", "label": "منخفض" },
+        { "value": "2", "label": "متوسط" },
+        { "value": "3", "label": "مرتفع" }
+      ],
+      "settings": { "rows": [ { "key": "content", "text": "المحتوى" }, { "key": "trainer", "text": "المدربة" } ] }
+    },
+    "ranking": {
+      "key": "ranking",
+      "type": "RANKING",
+      "text": "رتّبي",
+      "options": [
+        { "value": "x", "label": "س" },
+        { "value": "y", "label": "ص" },
+        { "value": "z", "label": "ع" }
+      ]
+    },
+    "date": { "key": "date", "type": "DATE", "text": "تاريخ البدء", "validation": { "date_min": "2026-01-01", "date_max": "2026-12-31" } },
+    "file": { "key": "file", "type": "FILE", "text": "أرفقي ملفًا", "required": true },
+    "info": { "key": "info", "type": "INFORMATION", "text": "نص توضيحي" }
+  },
+  "cases": [
+    { "q": "short", "value": null, "expected": "required" },
+    { "q": "short", "value": "   ", "expected": "required" },
+    { "q": "short", "value": "ن", "expected": "min_length" },
+    { "q": "short", "value": "نورة", "expected": null },
+    { "q": "short", "value": "نص طويل جدًا هنا", "expected": "max_length" },
+    { "q": "short", "value": ["a"], "expected": "invalid" },
+    { "q": "pattern", "value": "AB12", "expected": null },
+    { "q": "pattern", "value": "ab12", "expected": "pattern" },
+    { "q": "pattern", "value": "", "expected": null },
+    { "q": "long", "value": "رائع", "expected": null },
+    { "q": "likert", "value": 4, "expected": null },
+    { "q": "likert", "value": "4", "expected": null },
+    { "q": "likert", "value": 6, "expected": "max" },
+    { "q": "likert", "value": 2.5, "expected": "invalid" },
+    { "q": "likert", "value": "abc", "expected": "invalid" },
+    { "q": "likert", "value": null, "expected": "required" },
+    { "q": "nps", "value": 0, "expected": null },
+    { "q": "nps", "value": 10, "expected": null },
+    { "q": "nps", "value": 11, "expected": "max" },
+    { "q": "nps", "value": 7.5, "expected": "invalid" },
+    { "q": "number", "value": -1, "expected": "min" },
+    { "q": "number", "value": 12.5, "expected": null },
+    { "q": "slider", "value": 55, "expected": null },
+    { "q": "single", "value": "10", "expected": null },
+    { "q": "single", "value": "13", "expected": "invalid" },
+    { "q": "single", "value": ["10"], "expected": "invalid" },
+    { "q": "multi", "value": ["a", "b"], "expected": null },
+    { "q": "multi", "value": ["a", "b", "c"], "expected": "max_choices" },
+    { "q": "multi", "value": ["a", "a"], "expected": "invalid" },
+    { "q": "multi", "value": ["none", "a"], "expected": "invalid" },
+    { "q": "multi", "value": ["none"], "expected": null },
+    { "q": "multi", "value": "a", "expected": "invalid" },
+    { "q": "multi", "value": [], "expected": null },
+    { "q": "matrix", "value": { "content": 2, "trainer": 3 }, "expected": null },
+    { "q": "matrix", "value": { "content": 2 }, "expected": "matrix_incomplete" },
+    { "q": "matrix", "value": { "content": 2, "ghost": 1 }, "expected": "invalid" },
+    { "q": "matrix", "value": { "content": 9, "trainer": 1 }, "expected": "invalid" },
+    { "q": "matrix", "value": [2, 3], "expected": "invalid" },
+    { "q": "ranking", "value": ["z", "x", "y"], "expected": null },
+    { "q": "ranking", "value": ["x", "x"], "expected": "invalid" },
+    { "q": "ranking", "value": ["q"], "expected": "invalid" },
+    { "q": "date", "value": "2026-02-28", "expected": null },
+    { "q": "date", "value": "2026-02-30", "expected": "invalid" },
+    { "q": "date", "value": "2025-12-31", "expected": "min" },
+    { "q": "date", "value": "28/02/2026", "expected": "invalid" },
+    { "q": "file", "value": null, "expected": null },
+    { "q": "info", "value": "anything", "expected": null }
+  ]
+}

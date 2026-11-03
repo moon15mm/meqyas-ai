@@ -1,0 +1,147 @@
+# MEQYAS AI — local & single-host deployment
+#
+#   pnpm docker:up                 → full stack (postgres, redis, api, worker, web, proxy)
+#                                    open http://localhost (Caddy) — set SITE_ADDRESS for HTTPS
+#   docker compose up -d postgres redis   → only infrastructure (for `pnpm dev`)
+#   docker compose --profile ollama up -d → + local LLM (Ollama)
+#
+name: meqyas
+
+x-api-env: &api-env
+  ENVIRONMENT: ${ENVIRONMENT:-development}
+  DATABASE_URL: postgresql+asyncpg://meqyas:${POSTGRES_PASSWORD:-meqyas}@postgres:5432/meqyas
+  REDIS_URL: redis://redis:6379/0
+  JWT_SECRET: ${JWT_SECRET:-dev-insecure-jwt-secret-change-me-please-32b}
+  ENCRYPTION_KEY: ${ENCRYPTION_KEY:-}
+  WEB_BASE_URL: ${WEB_BASE_URL:-http://localhost}
+  # Caddy (one hop) appends the real client IP; the API port is bound to localhost only.
+  TRUSTED_PROXY_HOPS: ${TRUSTED_PROXY_HOPS:-1}
+  CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+  AI_PROVIDER: ${AI_PROVIDER:-openai}
+  AI_MODEL_FAST: ${AI_MODEL_FAST:-}
+  AI_MODEL_SMART: ${AI_MODEL_SMART:-}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+  OPENAI_STRUCTURED_MODE: ${OPENAI_STRUCTURED_MODE:-json_schema}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  OLLAMA_ENABLED: ${OLLAMA_ENABLED:-false}
+  OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+  OLLAMA_MODEL_FAST: ${OLLAMA_MODEL_FAST:-}
+  OLLAMA_MODEL_SMART: ${OLLAMA_MODEL_SMART:-}
+  STORAGE_PROVIDER: ${STORAGE_PROVIDER:-local}
+  STORAGE_LOCAL_PATH: /data/storage
+  S3_ENDPOINT: ${S3_ENDPOINT:-}
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY:-}
+  S3_SECRET_KEY: ${S3_SECRET_KEY:-}
+  S3_BUCKET: ${S3_BUCKET:-meqyas}
+  SEED_DEMO_ON_STARTUP: ${SEED_DEMO_ON_STARTUP:-true}
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: meqyas
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meqyas}
+      POSTGRES_DB: meqyas
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infrastructure/docker/postgres/init.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U meqyas -d meqyas"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--save", "60", "1000"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/api.Dockerfile
+    restart: unless-stopped
+    environment: *api-env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    volumes:
+      - storage:/data/storage
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/api/health').status==200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  worker:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/api.Dockerfile
+    restart: unless-stopped
+    command: ["arq", "app.jobs.worker.WorkerSettings"]
+    environment: *api-env
+    depends_on:
+      api: { condition: service_healthy }
+    volumes:
+      - storage:/data/storage
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/web.Dockerfile
+    restart: unless-stopped
+    environment:
+      API_INTERNAL_URL: http://api:8000
+      NODE_ENV: production
+    depends_on:
+      api: { condition: service_healthy }
+    ports:
+      - "127.0.0.1:${WEB_PORT:-3000}:3000"
+
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./infrastructure/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api: { condition: service_healthy }
+      web: { condition: service_started }
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ollama"]
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  pgdata:
+  redisdata:
+  storage:
+  ollama:
+  caddy_data:
+  caddy_config:

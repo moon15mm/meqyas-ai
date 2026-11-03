@@ -1,0 +1,18 @@
+# MEQYAS AI — edge proxy (TLS + routing).
+#   SITE_ADDRESS=:80                → plain HTTP on port 80 (default, local/single host)
+#   SITE_ADDRESS=meqyas.example.org → automatic HTTPS (Let's Encrypt)
+#
+# /api/* goes straight to FastAPI. Caddy replaces any client-supplied
+# X-Forwarded-For with the real peer address, so the API (TRUSTED_PROXY_HOPS=1)
+# rate-limits per real client IP. Everything else is served by Next.js.
+{$SITE_ADDRESS::80} {
+	encode zstd gzip
+
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		reverse_proxy web:3000
+	}
+}

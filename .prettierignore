@@ -1,0 +1,11 @@
+node_modules
+.next
+.venv
+pnpm-lock.yaml
+apps/api
+packages/ai
+storage
+coverage
+playwright-report
+test-results
+docs/*.md

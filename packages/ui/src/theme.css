@@ -1,0 +1,217 @@
+/*
+ * MEQYAS AI design tokens (Tailwind v4).
+ * Tier 1–2 tokens as CSS custom properties, mapped to Tailwind utilities via @theme inline.
+ * Import AFTER `@import "tailwindcss"` in the app stylesheet.
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root,
+.paper-light {
+  --radius: 0.875rem;
+
+  --background: oklch(0.985 0.004 260);
+  --foreground: oklch(0.22 0.03 265);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(0.47 0.17 268);
+  --primary-foreground: oklch(0.99 0.003 260);
+  --secondary: oklch(0.955 0.012 265);
+  --secondary-foreground: oklch(0.3 0.06 268);
+  --muted: oklch(0.965 0.007 260);
+  --muted-foreground: oklch(0.5 0.022 262);
+  --accent: oklch(0.95 0.02 268);
+  --accent-foreground: oklch(0.3 0.08 268);
+
+  --evidence: oklch(0.6 0.11 185);
+  --evidence-foreground: oklch(0.99 0.003 260);
+  --success: oklch(0.58 0.13 155);
+  --success-foreground: oklch(0.99 0.003 260);
+  --warning: oklch(0.76 0.15 75);
+  --warning-foreground: oklch(0.28 0.06 60);
+  --destructive: oklch(0.57 0.21 25);
+  --destructive-foreground: oklch(0.99 0.003 260);
+
+  --border: oklch(0.915 0.011 262);
+  --input: oklch(0.88 0.014 262);
+  --ring: oklch(0.47 0.17 268);
+
+  --chart-1: oklch(0.52 0.17 268);
+  --chart-2: oklch(0.62 0.11 185);
+  --chart-3: oklch(0.72 0.15 75);
+  --chart-4: oklch(0.6 0.16 330);
+  --chart-5: oklch(0.6 0.13 145);
+
+  /*
+   * Data-viz roles (analytics). Validated with the dataviz palette script against the
+   * card surface (#ffffff light, #131823 dark) — dark steps are selected, not flipped.
+   *   --viz-1         single series (categorical slot 1)
+   *   --viz-seq-1..5  one-hue ordinal ramp, earliest → latest wave (light → dark)
+   *   --viz-pos/neg   diverging arms, mild → strong (blue = agree/satisfied, red = the opposite)
+   *   --viz-mid       neutral gray midpoint
+   */
+  --viz-1: #2a78d6;
+  --viz-seq-1: #86b6ef;
+  --viz-seq-2: #5598e7;
+  --viz-seq-3: #2a78d6;
+  --viz-seq-4: #1c5cab;
+  --viz-seq-5: #104281;
+  --viz-pos-1: #86b6ef;
+  --viz-pos-2: #2a78d6;
+  --viz-pos-3: #104281;
+  --viz-neg-1: #ea9891;
+  --viz-neg-2: #cb4644;
+  --viz-neg-3: #932b2a;
+  --viz-mid: #f0efec;
+  --viz-wash: color-mix(in oklch, var(--viz-1) 10%, transparent);
+
+  --sidebar: oklch(0.995 0.002 260);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-accent: oklch(0.955 0.018 268);
+  --sidebar-accent-foreground: oklch(0.32 0.1 268);
+  --sidebar-border: var(--border);
+
+  --hero-from: oklch(0.47 0.17 268);
+  --hero-to: oklch(0.55 0.12 200);
+
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(0.17 0.02 265);
+  --foreground: oklch(0.96 0.005 260);
+  --card: oklch(0.21 0.024 265);
+  --popover: oklch(0.22 0.025 265);
+  --primary: oklch(0.7 0.14 270);
+  --primary-foreground: oklch(0.18 0.03 268);
+  --secondary: oklch(0.27 0.03 265);
+  --secondary-foreground: oklch(0.92 0.02 265);
+  --muted: oklch(0.25 0.022 265);
+  --muted-foreground: oklch(0.72 0.02 262);
+  --accent: oklch(0.29 0.04 268);
+  --accent-foreground: oklch(0.93 0.03 268);
+  --evidence: oklch(0.72 0.11 185);
+  --evidence-foreground: oklch(0.18 0.03 200);
+  --border: oklch(0.31 0.022 265);
+  --input: oklch(0.36 0.025 265);
+  --ring: oklch(0.7 0.14 270);
+  --sidebar: oklch(0.19 0.022 265);
+  --sidebar-accent: oklch(0.27 0.035 268);
+  --sidebar-accent-foreground: oklch(0.93 0.03 268);
+  --viz-1: #3987e5;
+  --viz-seq-1: #184f95;
+  --viz-seq-2: #256abf;
+  --viz-seq-3: #3987e5;
+  --viz-seq-4: #6da7ec;
+  --viz-seq-5: #9ec5f4;
+  --viz-pos-1: #184f95;
+  --viz-pos-2: #3987e5;
+  --viz-pos-3: #9ec5f4;
+  --viz-neg-1: #932b2a;
+  --viz-neg-2: #dc5e59;
+  --viz-neg-3: #f8a49d;
+  --viz-mid: #383835;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: var(--font-plex), "IBM Plex Sans Arabic", "Segoe UI", Tahoma, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-evidence: var(--evidence);
+  --color-evidence-foreground: var(--evidence-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: calc(var(--radius) - 2px);
+  --radius-xl: var(--radius);
+  --radius-2xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  :where(*, ::before, ::after) {
+    border-color: var(--border);
+  }
+
+  :where(a:any-link, button, [role="button"], input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklch, var(--primary) 22%, transparent);
+  }
+
+  /* Western digits stay readable inside Arabic text; tabular for tables/KPIs. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(*, ::before, ::after) {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility visually-hidden {
+  position: absolute;
+  clip-path: inset(50%);
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+}

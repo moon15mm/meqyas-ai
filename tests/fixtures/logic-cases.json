@@ -1,0 +1,148 @@
+{
+  "description": "Shared logic-engine fixtures. Executed by apps/api/tests/unit/test_survey_logic.py AND packages/shared/tests/logic.test.ts — both engines must agree.",
+  "survey": {
+    "title": "استبيان رضا الطالبات",
+    "language": "ar",
+    "sections": [
+      {
+        "key": "s1",
+        "title": "البيانات الأساسية",
+        "questions": [
+          {
+            "key": "consent",
+            "type": "SINGLE_CHOICE",
+            "text": "هل توافقين على المشاركة؟",
+            "required": true,
+            "options": [
+              { "value": "yes", "label": "نعم" },
+              { "value": "no", "label": "لا" }
+            ]
+          },
+          {
+            "key": "grade",
+            "type": "SINGLE_CHOICE",
+            "text": "الصف",
+            "options": [
+              { "value": "10", "label": "الأول الثانوي" },
+              { "value": "11", "label": "الثاني الثانوي" },
+              { "value": "12", "label": "الثالث الثانوي" }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "s2",
+        "title": "الرضا",
+        "questions": [
+          { "key": "satisfaction", "type": "LIKERT", "text": "أنا راضية عن البرنامج", "required": true },
+          { "key": "why_dissatisfied", "type": "LONG_TEXT", "text": "ما سبب عدم رضاك يا طالبة {{answer:grade}}؟" },
+          {
+            "key": "topics",
+            "type": "MULTIPLE_CHOICE",
+            "text": "ما الموضوعات التي استفدت منها؟",
+            "options": [
+              { "value": "ai", "label": "الذكاء الاصطناعي" },
+              { "value": "math", "label": "الرياضيات" },
+              { "value": "science", "label": "العلوم" }
+            ]
+          },
+          {
+            "key": "ai_tools",
+            "type": "SINGLE_CHOICE",
+            "text": "هل استخدمت أدوات الذكاء الاصطناعي؟",
+            "options": [
+              { "value": "yes", "label": "نعم" },
+              { "value": "no", "label": "لا" }
+            ]
+          },
+          { "key": "ai_usage", "type": "RATING", "text": "كم مرة تستخدمينها؟", "scale": { "min": 1, "max": 5 } },
+          {
+            "key": "skills",
+            "type": "MATRIX",
+            "text": "قيّمي مهاراتك",
+            "options": [
+              { "value": "1", "label": "منخفض" },
+              { "value": "2", "label": "متوسط" },
+              { "value": "3", "label": "مرتفع" }
+            ],
+            "settings": { "rows": [ { "key": "search", "text": "البحث" }, { "key": "writing", "text": "الكتابة" } ] }
+          }
+        ]
+      },
+      {
+        "key": "s3",
+        "title": "التوصية",
+        "questions": [
+          { "key": "recommend", "type": "NPS", "text": "هل توصين بالبرنامج؟" },
+          { "key": "comment", "type": "SHORT_TEXT", "text": "ما الذي نحسنه؟" },
+          { "key": "thanks", "type": "INFORMATION", "text": "شكرًا لك" }
+        ]
+      }
+    ],
+    "logic": [
+      { "id": "end_no_consent", "type": "END", "source_key": "consent", "condition": { "question": "consent", "op": "eq", "value": "no" } },
+      { "id": "show_why", "type": "DISPLAY", "target_key": "why_dissatisfied", "condition": { "question": "satisfaction", "op": "in", "value": [1, 2] } },
+      { "id": "skip_ai", "type": "SKIP", "source_key": "ai_tools", "target_key": "s3", "condition": { "question": "ai_tools", "op": "eq", "value": "no" } },
+      { "id": "show_comment", "type": "DISPLAY", "target_key": "comment", "condition": { "question": "recommend", "op": "lte", "value": 6 } }
+    ]
+  },
+  "conditions": [
+    { "name": "eq number vs string", "condition": { "question": "satisfaction", "op": "eq", "value": "4" }, "answers": { "satisfaction": 4 }, "expected": true },
+    { "name": "neq unanswered is false", "condition": { "question": "satisfaction", "op": "neq", "value": 4 }, "answers": {}, "expected": false },
+    { "name": "in list", "condition": { "question": "satisfaction", "op": "in", "value": [1, 2] }, "answers": { "satisfaction": 2 }, "expected": true },
+    { "name": "not_in list", "condition": { "question": "satisfaction", "op": "not_in", "value": [1, 2] }, "answers": { "satisfaction": 5 }, "expected": true },
+    { "name": "gt", "condition": { "question": "recommend", "op": "gt", "value": 8 }, "answers": { "recommend": 9 }, "expected": true },
+    { "name": "lte boundary", "condition": { "question": "recommend", "op": "lte", "value": 6 }, "answers": { "recommend": 6 }, "expected": true },
+    { "name": "numeric op on text is false", "condition": { "question": "comment", "op": "gt", "value": 3 }, "answers": { "comment": "abc" }, "expected": false },
+    { "name": "multi contains", "condition": { "question": "topics", "op": "contains", "value": "ai" }, "answers": { "topics": ["math", "ai"] }, "expected": true },
+    { "name": "multi eq means selected", "condition": { "question": "topics", "op": "eq", "value": "science" }, "answers": { "topics": ["math", "ai"] }, "expected": false },
+    { "name": "multi not_contains", "condition": { "question": "topics", "op": "not_contains", "value": "science" }, "answers": { "topics": ["math"] }, "expected": true },
+    { "name": "multi in any overlap", "condition": { "question": "topics", "op": "in", "value": ["science", "ai"] }, "answers": { "topics": ["ai"] }, "expected": true },
+    { "name": "multi count gte", "condition": { "question": "topics", "op": "gte", "value": 2 }, "answers": { "topics": ["ai", "math"] }, "expected": true },
+    { "name": "text contains case-insensitive", "condition": { "question": "comment", "op": "contains", "value": "TIME" }, "answers": { "comment": "more time please" }, "expected": true },
+    { "name": "answered", "condition": { "question": "comment", "op": "answered" }, "answers": { "comment": "  " }, "expected": false },
+    { "name": "not_answered empty list", "condition": { "question": "topics", "op": "not_answered" }, "answers": { "topics": [] }, "expected": true },
+    { "name": "matrix row", "condition": { "question": "skills", "row": "search", "op": "lte", "value": 1 }, "answers": { "skills": { "search": 1, "writing": 3 } }, "expected": true },
+    { "name": "matrix missing row", "condition": { "question": "skills", "row": "writing", "op": "answered" }, "answers": { "skills": { "search": 1 } }, "expected": false },
+    { "name": "all group", "condition": { "all": [ { "question": "grade", "op": "eq", "value": "10" }, { "question": "satisfaction", "op": "gte", "value": 4 } ] }, "answers": { "grade": "10", "satisfaction": 5 }, "expected": true },
+    { "name": "any group", "condition": { "any": [ { "question": "grade", "op": "eq", "value": "12" }, { "question": "satisfaction", "op": "lt", "value": 2 } ] }, "answers": { "grade": "10", "satisfaction": 3 }, "expected": false },
+    { "name": "not group", "condition": { "not": { "question": "grade", "op": "eq", "value": "12" } }, "answers": { "grade": "10" }, "expected": true },
+    { "name": "empty condition is true", "condition": {}, "answers": {}, "expected": true },
+    { "name": "empty any is false", "condition": { "any": [] }, "answers": {}, "expected": false },
+    { "name": "unknown operator is false", "condition": { "question": "grade", "op": "magic", "value": "10" }, "answers": { "grade": "10" }, "expected": false },
+    { "name": "bool is not numeric", "condition": { "question": "recommend", "op": "eq", "value": 1 }, "answers": { "recommend": true }, "expected": false }
+  ],
+  "paths": [
+    {
+      "name": "no consent ends the survey",
+      "answers": { "consent": "no" },
+      "expected_visible": ["consent"],
+      "expected_ended_by": "consent"
+    },
+    {
+      "name": "satisfied student using AI sees everything except the why/comment follow-ups",
+      "answers": { "consent": "yes", "grade": "11", "satisfaction": 5, "ai_tools": "yes", "recommend": 9 },
+      "expected_visible": ["consent", "grade", "satisfaction", "topics", "ai_tools", "ai_usage", "skills", "recommend", "thanks"],
+      "expected_ended_by": null
+    },
+    {
+      "name": "dissatisfied student without AI: why shown, AI questions skipped, comment shown",
+      "answers": { "consent": "yes", "grade": "10", "satisfaction": 1, "ai_tools": "no", "recommend": 3 },
+      "expected_visible": ["consent", "grade", "satisfaction", "why_dissatisfied", "topics", "ai_tools", "recommend", "comment", "thanks"],
+      "expected_ended_by": null
+    },
+    {
+      "name": "nothing answered yet",
+      "answers": {},
+      "expected_visible": ["consent", "grade", "satisfaction", "topics", "ai_tools", "ai_usage", "skills", "recommend", "thanks"],
+      "expected_ended_by": null
+    }
+  ],
+  "piping": [
+    { "text": "ما سبب عدم رضاك يا طالبة {{answer:grade}}؟", "answers": { "grade": "11" }, "expected": "ما سبب عدم رضاك يا طالبة الثاني الثانوي؟" },
+    { "text": "اخترت: {{ answer:topics }}", "answers": { "topics": ["ai", "math"] }, "expected": "اخترت: الذكاء الاصطناعي، الرياضيات" },
+    { "text": "تقييمك {{answer:satisfaction}}", "answers": { "satisfaction": 4 }, "expected": "تقييمك أوافق" },
+    { "text": "غير مُجاب {{answer:comment}}.", "answers": {}, "expected": "غير مُجاب ." },
+    { "text": "بلا متغيرات", "answers": {}, "expected": "بلا متغيرات" }
+  ]
+}

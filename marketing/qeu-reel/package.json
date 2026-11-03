@@ -1,0 +1,35 @@
+{
+  "name": "@meqyas/qeu-reel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "إعلان ريلز «لا تخلّي الكرتون المطعوج يفضحك في إكس!» — Meqyas Commerce AI × QEU (35s · 9:16)",
+  "scripts": {
+    "dev": "vite --port 3150 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --port 3151 --strictPort",
+    "start": "vite build && vite preview --port 3151 --strictPort",
+    "audio": "node scripts/render-audio.mjs",
+    "studio": "node scripts/render-audio.mjs && remotion studio remotion/index.jsx",
+    "still": "remotion still remotion/index.jsx QeuReel out/frame.png --frame=330",
+    "render": "node scripts/render-audio.mjs && remotion render remotion/index.jsx QeuReel out/meqyas-qeu-reel.mp4"
+  },
+  "dependencies": {
+    "@fontsource-variable/cairo": "^5.3.0",
+    "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
+    "framer-motion": "^14.9.0",
+    "lucide-react": "^1.66.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "4.0.539"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.539",
+    "@remotion/tailwind-v4": "4.0.539",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.5",
+    "vite-plugin-singlefile": "^2.3.4"
+  }
+}

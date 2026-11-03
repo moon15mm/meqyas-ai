@@ -1,0 +1,42 @@
+# dependencies
+node_modules/
+.pnpm-store/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# builds
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# runtime data
+storage/
+*.log
+.coverage
+htmlcov/
+coverage/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# tests
+playwright-report/
+test-results/
+tests/e2e/.auth/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

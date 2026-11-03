@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cairo Variable", "Cairo", system-ui, sans-serif;
+  --font-ui: "IBM Plex Sans Arabic", "Cairo Variable", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+}
+
+html,
+body {
+  margin: 0;
+  background: #05050a;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+.reel-stage {
+  font-family: var(--font-display);
+  text-rendering: optimizeLegibility;
+}
+
+.reel-stage svg {
+  display: inline-block;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.35) transparent;
+}

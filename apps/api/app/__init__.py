@@ -1,0 +1,1 @@
+"""MEQYAS AI — FastAPI backend."""

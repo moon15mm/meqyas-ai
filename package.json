@@ -1,0 +1,38 @@
+{
+  "name": "meqyas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "مِقياس AI — AI Measurement & Impact Platform",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.9"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:api": "uv run --directory apps/api uvicorn app.main:app --reload --port 8000",
+    "dev:web": "pnpm --filter @meqyas/web dev",
+    "build": "pnpm --filter @meqyas/web build",
+    "start:web": "pnpm --filter @meqyas/web start",
+    "test": "pnpm test:api && pnpm test:web",
+    "test:api": "uv run pytest",
+    "test:web": "pnpm -r --if-present test",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.ts",
+    "lint": "pnpm lint:api && pnpm lint:web",
+    "lint:api": "uv run ruff check apps/api packages/ai",
+    "lint:web": "pnpm -r --if-present lint && pnpm -r --if-present typecheck",
+    "format": "uv run ruff format apps/api packages/ai && prettier --write \"**/*.{ts,tsx,mjs,json,css,md}\"",
+    "db:migrate": "uv run --directory apps/api alembic upgrade head",
+    "db:revision": "uv run --directory apps/api alembic revision --autogenerate -m",
+    "db:seed": "uv run --directory apps/api python -m app.seed",
+    "admin": "uv run --directory apps/api python -m app.admin",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:infra": "docker compose up -d postgres redis"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "concurrently": "^10.0.6",
+    "prettier": "^3.9.9",
+    "typescript": "~5.9.3"
+  }
+}
