@@ -3,7 +3,8 @@
 **Track:** Startup Track  
 **Total Video Length:** Exactly 03:00 (180 Seconds)  
 **Tone:** Confident, technical, transparent, and founder-led product walkthrough.  
-**Language:** English Voiceover (with authentic Arabic on-screen demonstrations).
+**Language:** English Voiceover (with authentic Arabic on-screen demonstrations).  
+**Final narration:** see [`marketing/demo-video/VOICEOVER.md`](marketing/demo-video/VOICEOVER.md) — it supersedes the voiceover drafts below.
 
 ---
 
