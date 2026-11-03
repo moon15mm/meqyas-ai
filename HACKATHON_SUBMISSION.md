@@ -5,6 +5,7 @@
 **Theme:** Build for Your World  
 **Live Production URL:** [https://meqyas.wardat.xyz/](https://meqyas.wardat.xyz/)  
 **GitHub Repository:** [https://github.com/moon15mm/meqyas-ai](https://github.com/moon15mm/meqyas-ai)  
+**Demo Video URL (YouTube):** [https://youtu.be/K0VfvQ25ibI](https://youtu.be/K0VfvQ25ibI)  
 **Founder:** Eng. Maher Sulaiman (Wardat AI Technologies) — `contact@wardat.xyz`
 
 ---
